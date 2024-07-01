@@ -15,23 +15,23 @@
     }
     .grid-container {
       position: relative;
-      width: 500px;
-      height: 500px;
+      width: 600px;
+      height: 600px;
       background-image: url('your-image.png');
       background-size: cover;
       background-position: center;
       overflow: hidden;
     }
-    .grid-item {
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      background-color: rgba(0, 0, 0, 1);
-      background-size: cover;
-      background-position: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
+.grid-item {
+  position: absolute;
+  width: calc(100% / 6); /* Adjusted for 6x6 grid */
+  height: calc(100% / 6); /* Adjusted for 6x6 grid */
+  background-color: rgba(0, 0, 0, 1);
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
     .question-popup {
       display: none;
       position: fixed;
@@ -93,6 +93,17 @@
       { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
       { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
       { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
       // Add more cards as needed
     ];
 
@@ -101,18 +112,18 @@
 
     generateGrid();
 
-    function generateGrid() {
-      cards.forEach((card, index) => {
-        const cell = document.createElement('div');
-        cell.classList.add('grid-item');
-        cell.dataset.index = index;
-        cell.style.left = `${index % 5 * 100}px`;
-        cell.style.top = `${Math.floor(index / 5) * 100}px`;
-        cell.style.backgroundImage = "url('smug.png')";
-        cell.addEventListener('click', () => revealCard(index));
-        gridContainer.appendChild(cell);
-      });
-    }
+function generateGrid() {
+  cards.forEach((card, index) => {
+    const cell = document.createElement('div');
+    cell.classList.add('grid-item');
+    cell.dataset.index = index;
+    cell.style.left = `${index % 6 * (100 / 6)}%`; // Adjusted for 6x6 grid
+    cell.style.top = `${Math.floor(index / 6) * (100 / 6)}%`; // Adjusted for 6x6 grid
+    cell.style.backgroundImage = "url('smug.png')";
+    cell.addEventListener('click', () => revealCard(index));
+    gridContainer.appendChild(cell);
+  });
+}
 
     function revealCard(index) {
       if (!cards[index].revealed && revealedCards.length < 2) {

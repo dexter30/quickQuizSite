@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matching Card Game</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .grid-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      background-image: url('your-image.png');
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+    .grid-item {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: rgba(0, 0, 0, 1);
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .question-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border: 1px solid black;
+      z-index: 3;
+    }
+    .question-popup.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-container" id="grid-container">
+    <!-- Grid items will be generated here -->
+  </div>
+  <div class="question-popup" id="question-popup">
+    <p id="question-text"></p>
+    <input type="text" id="answer-input">
+    <button id="submit-answer">Submit</button>
+  </div>
+  <script>
+    const gridContainer = document.getElementById('grid-container');
+    const questionPopup = document.getElementById('question-popup');
+    const questionText = document.getElementById('question-text');
+    const answerInput = document.getElementById('answer-input');
+    const submitAnswer = document.getElementById('submit-answer');
+
+    let revealedCards = [];
+    let matchedPairs = 0;
+
+    const cards = [
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+      // Add more cards as needed
+    ];
+
+    // Shuffle cards (optional)
+    cards.sort(() => Math.random() - 0.5);
+
+    generateGrid();
+
+    function generateGrid() {
+      cards.forEach((card, index) => {
+        const cell = document.createElement('div');
+        cell.classList.add('grid-item');
+        cell.dataset.index = index;
+        cell.style.left = `${index % 5 * 100}px`;
+        cell.style.top = `${Math.floor(index / 5) * 100}px`;
+        cell.style.backgroundImage = "url('smug.png')";
+        cell.addEventListener('click', () => revealCard(index));
+        gridContainer.appendChild(cell);
+      });
+    }
+
+    function revealCard(index) {
+      if (!cards[index].revealed && revealedCards.length < 2) {
+        const cell = gridContainer.querySelector(`.grid-item[data-index='${index}']`);
+        cell.style.backgroundImage = `url('${cards[index].image}')`;
+        cards[index].revealed = true;
+        revealedCards.push(index);
+
+        if (revealedCards.length === 2) {
+          checkForMatch();
+        }
+      }
+    }
+
+    function checkForMatch() {
+      const [firstCardIndex, secondCardIndex] = revealedCards;
+      if (cards[firstCardIndex].image === cards[secondCardIndex].image) {
+        cards[firstCardIndex].matched = true;
+        cards[secondCardIndex].matched = true;
+        matchedPairs++;
+        showCards(firstCardIndex, secondCardIndex);
+
+        if (matchedPairs === cards.length / 2) {
+          revealBackground();
+          setTimeout(() => {
+            alert('Congratulations! You matched all pairs.');
+          }, 500); // Delayed alert to ensure background is fully revealed
+        }
+      } else {
+        setTimeout(() => {
+          hideCards(firstCardIndex, secondCardIndex);
+        }, 1000);
+      }
+      revealedCards = [];
+    }
+
+    function hideCards(...indices) {
+      indices.forEach(index => {
+        const cell = gridContainer.querySelector(`.grid-item[data-index='${index}']`);
+        cell.style.backgroundImage = "url('smug.png')";
+        cell.style.opacity = '1';
+        cards[index].revealed = false;
+      });
+    }
+    function showCards(...indices) {
+      indices.forEach(index => {
+        const cell = gridContainer.querySelector(`.grid-item[data-index='${index}']`);
+        cell.style.opacity = '0';
+      });
+    }
+
+    function revealBackground() {
+      gridContainer.style.backgroundImage = "your-image.png";
+    }
+  </script>
+</body>
+</html>
+

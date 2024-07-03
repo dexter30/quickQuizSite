@@ -15,20 +15,21 @@
     }
     .grid-container {
       position: relative;
-      width: 600px;
-      height: 600px;
-      background-image: url('your-image.png');
+      width: 1464px;
+      height: 764px;
+      background-image: url('colImage.png');
       background-size: cover;
       background-position: center;
-      overflow: hidden;
+      overflow: visible;
     }
 .grid-item {
   position: absolute;
   width: calc(100% / 6); /* Adjusted for 6x6 grid */
   height: calc(100% / 6); /* Adjusted for 6x6 grid */
   background-color: rgba(0, 0, 0, 1);
-  background-size: cover;
-  background-position: center;
+  background-size: contain; /* Ensure the image fits within the container */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-position: center; /* Center the image */
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -66,46 +67,56 @@
 
     let revealedCards = [];
     let matchedPairs = 0;
+    const totalPairs = 18; // Number of pairs of cards
+    const totalCards = totalPairs * 2; // Total number of cards
+    const imageFolder = 'tiles'; // Folder containing the images
 
-    const cards = [
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
-      // Add more cards as needed
-    ];
+    const cards = [];
+        for (let i = 1; i <= totalPairs; i++) {
+            const card1 = { id: i, image: `${imageFolder}/${i}.svg`, revealed: false, matched: false};
+            const card2 = { id: i, image: `${imageFolder}/${i}.svg`,revealed: false, matched: false };
+            cards.push(card1, card2);
+        }
+    
+  //     const cards = [
+  //   { id: 3, image: 'tiles/1.svg', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 0, image: 'custom-image1.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   { id: 1, image: 'custom-image2.png', revealed: false, matched: false },
+  //   // Add more cards as needed
+  // ];
 
     // Shuffle cards (optional)
     cards.sort(() => Math.random() - 0.5);
@@ -116,11 +127,12 @@ function generateGrid() {
   cards.forEach((card, index) => {
     const cell = document.createElement('div');
     cell.classList.add('grid-item');
-    cell.dataset.index = index;
-    cell.style.left = `${index % 6 * (100 / 6)}%`; // Adjusted for 6x6 grid
-    cell.style.top = `${Math.floor(index / 6) * (100 / 6)}%`; // Adjusted for 6x6 grid
-    cell.style.backgroundImage = "url('smug.png')";
-    cell.addEventListener('click', () => revealCard(index));
+        cell.dataset.index = index;
+        cell.style.left = `${index % 6 * (100 / 6)}%`; // Adjusted for 6x6 grid
+        cell.style.top = `${Math.floor(index / 6) * (100 / 6)}%`; // Adjusted for 6x6 grid
+        cell.style.backgroundImage = "url('05.svg')";
+        cell.style.opacity = '1';
+        cell.addEventListener('click', () => revealCard(index));
     gridContainer.appendChild(cell);
   });
 }
@@ -163,7 +175,7 @@ function generateGrid() {
     function hideCards(...indices) {
       indices.forEach(index => {
         const cell = gridContainer.querySelector(`.grid-item[data-index='${index}']`);
-        cell.style.backgroundImage = "url('smug.png')";
+        cell.style.backgroundImage = "url('05.svg')";
         cell.style.opacity = '1';
         cards[index].revealed = false;
       });
@@ -176,7 +188,7 @@ function generateGrid() {
     }
 
     function revealBackground() {
-      gridContainer.style.backgroundImage = "your-image.png";
+      gridContainer.style.backgroundImage = "colImage.png";
     }
   </script>
 </body>
